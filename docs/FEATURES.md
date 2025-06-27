@@ -62,12 +62,33 @@ interface EditorConfig {
   line-height: 1.4;
 }
 
-.single-column img {
-  float: right;
+.cv-header {
+  position: relative;
+  min-height: 160px;
+}
+
+.cv-header-text {
+  margin-right: 140px; /* Space for headshot */
+}
+
+.cv-name {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cv-title {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.cv-headshot {
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 120px;
   height: 150px;
-  margin-left: 1rem;
   border-radius: 4px;
+  object-fit: cover;
 }
 ```
 

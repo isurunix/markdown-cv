@@ -4,6 +4,7 @@ import { debounce } from '@/lib/markdown';
 import { useCVStore } from '@/lib/store';
 import Editor from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
+import '@/styles/editor.css';
 
 export function MarkdownEditor() {
   const { markdown, setMarkdown, darkMode } = useCVStore();
@@ -100,17 +101,17 @@ export function MarkdownEditor() {
   }, []);
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="markdown-editor">
       {/* Editor Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
-        <h2 className="text-sm font-medium text-gray-900">Markdown Editor</h2>
-        <div className="flex items-center space-x-2 text-xs text-gray-500">
+      <div className="editor-toolbar">
+        <h2>Markdown Editor</h2>
+        <div className="editor-status">
           <span>Auto-saved</span>
         </div>
       </div>
 
       {/* Monaco Editor */}
-      <div className="flex-1">
+      <div className="editor-container">
         <Editor
           height="100%"
           defaultLanguage="markdown"
@@ -158,13 +159,13 @@ export function MarkdownEditor() {
       </div>
 
       {/* Editor Help */}
-      <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <div className="flex items-center space-x-4">
+      <div className="editor-help">
+        <div className="editor-help-content">
+          <div className="editor-tips">
             <span>💡 Type "cv-" for templates</span>
             <span>📝 Markdown supported</span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="editor-stats">
             <span>Ctrl+S: Save</span>
             <span>•</span>
             <span>Lines: {markdown.split('\n').length}</span>

@@ -1,0 +1,88 @@
+/* Markdown Editor Styles */
+
+.markdown-editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.editor-toolbar h2 {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+}
+
+.editor-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.editor-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.editor-help {
+  padding: 0.5rem 1rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.editor-help-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.editor-tips {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.editor-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editor-help-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.editor-help-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .editor-help-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .editor-help-left span:nth-child(n+2) {
+    display: none;
+  }
+}

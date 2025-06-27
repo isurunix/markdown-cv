@@ -1,0 +1,202 @@
+/* Two Column CV Template Styles */
+
+.two-column-cv {
+  font-family: var(--body-font);
+  color: var(--text-color);
+  line-height: 1.4;
+  padding: var(--padding);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+  max-width: 8.5in;
+  min-height: 11in;
+  margin: 0 auto;
+}
+
+.main-content {
+  /* Left column - main content area */
+  min-height: 100px;
+}
+
+.sidebar {
+  /* Right column */
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.cv-header {
+  grid-column: 1 / -1;
+  margin-bottom: var(--section-gap);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cv-header-text {
+  flex: 1;
+}
+
+.cv-name {
+  font-family: var(--heading-font);
+  font-size: var(--h1-size);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.cv-title {
+  font-size: calc(var(--h3-size) * 1.2);
+  color: var(--secondary-color);
+  font-style: italic;
+  margin: 0;
+}
+
+.cv-headshot {
+  width: 140px;
+  height: 175px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+
+.cv-content h2 {
+  font-family: var(--heading-font);
+  color: var(--accent-color);
+  font-size: var(--h2-size);
+  font-weight: 600;
+  margin: var(--section-gap) 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cv-content h3 {
+  font-family: var(--heading-font);
+  color: var(--text-color);
+  font-size: var(--h3-size);
+  font-weight: 600;
+  margin: var(--item-gap) 0 4px 0;
+}
+
+.cv-content p {
+  font-size: var(--body-size);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.cv-content ul {
+  margin: 8px 0;
+  padding-left: 16px;
+}
+
+.cv-content li {
+  font-size: var(--body-size);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.cv-content strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.cv-content a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.cv-content a:hover {
+  text-decoration: underline;
+}
+
+/* Sidebar specific styles */
+.sidebar .cv-content h2 {
+  margin-top: 16px;
+  font-size: calc(var(--h2-size) * 0.9);
+}
+
+.sidebar .cv-content h2:first-child {
+  margin-top: 0;
+}
+
+.sidebar .cv-content p,
+.sidebar .cv-content li {
+  font-size: calc(var(--body-size) * 0.95);
+}
+
+/* Template-specific styles */
+.executive-two-column .sidebar {
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-left: 4px solid var(--accent-color);
+}
+
+.tech-professional .sidebar {
+  background: #f1f5f9;
+  border-left: 4px solid var(--accent-color);
+}
+
+.tech-professional .cv-headshot {
+  border-radius: 12px;
+}
+
+.tech-professional .cv-content .tech-skills {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: calc(var(--body-size) * 0.9);
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid var(--accent-color);
+}
+
+/* Print styles */
+@media print {
+  .two-column-cv {
+    padding: 0.5in;
+    gap: 16px;
+    font-size: 10px;
+  }
+  
+  .cv-content h1 {
+    font-size: 22px;
+  }
+  
+  .cv-content h2 {
+    font-size: 12px;
+  }
+  
+  .cv-content h3 {
+    font-size: 11px;
+  }
+
+  .sidebar {
+    padding: 16px;
+  }
+
+  .cv-headshot {
+    width: 120px;
+    height: 150px;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .two-column-cv {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .cv-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cv-headshot {
+    margin: 16px 0 0 0;
+    width: 120px;
+    height: 150px;
+  }
+}
