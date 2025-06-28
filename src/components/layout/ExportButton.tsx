@@ -1,11 +1,12 @@
 "use client";
 
+import { PDFGenerator } from '@/lib/pdf/PDFGenerator';
 import { useCVStore } from '@/lib/store';
 import { ChevronDown, Download, FileText, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 export function ExportButton() {
-  const { isExporting, setExporting, markdown, layout, template } = useCVStore();
+  const { isExporting, setExporting, pageFormat } = useCVStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleExport = async (format: 'standard' | 'ats') => {
@@ -13,38 +14,27 @@ export function ExportButton() {
       setExporting(true);
       setIsOpen(false); // Close dropdown
       
-      // TODO: Implement PDF generation API call
-      const response = await fetch('/api/pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: markdown,
-          layout: format === 'ats' ? 'single-column' : layout,
-          template: template,
-          format: format,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+      // Get the CV preview element
+      const previewElement = document.querySelector('.cv-preview-content') as HTMLElement;
+      if (!previewElement) {
+        throw new Error('CV preview not found. Please ensure the CV is loaded.');
       }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = `cv-${format}-${Date.now()}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      // Generate PDF using our client-side service
+      const result = format === 'ats' 
+        ? await PDFGenerator.generateATSPDF(previewElement, pageFormat)
+        : await PDFGenerator.generateStandardPDF(previewElement, pageFormat);
+
+      if (!result.success) {
+        throw new Error(result.error || 'PDF generation failed');
+      }
+
+      // Show success feedback (optional)
+      console.log(`PDF generated successfully: ${result.pageCount} pages, ${Math.round((result.fileSize || 0) / 1024)}KB`);
+      
     } catch (error) {
       console.error('Export failed:', error);
-      // TODO: Show error toast
-      alert('Export failed. Please try again.');
+      alert(`Export failed: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setExporting(false);
     }

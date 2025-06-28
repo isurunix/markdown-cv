@@ -43,10 +43,28 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: var(--headshot-width, 120px) !important;
-  height: var(--headshot-height, 150px) !important;
-  border-radius: var(--headshot-border-radius, 8px) !important;
+  width: var(--headshot-width, 120px);
+  height: var(--headshot-height, 150px);
+  overflow: hidden;
+  border-radius: var(--headshot-border-radius, 8px);
+}
+
+.single-column-cv .cv-headshot img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
+}
+
+.single-column-cv .cv-headshot.circular {
+  width: var(--headshot-size, 120px);
+  height: var(--headshot-size, 120px);
+  border-radius: 50%;
+}
+
+.single-column-cv .cv-headshot.circular img {
+  width: 100%;
+  height: 100%;
 }
 
 .cv-content h2 {

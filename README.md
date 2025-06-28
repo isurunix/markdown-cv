@@ -11,7 +11,7 @@ A modern, responsive web application for creating professional CVs/resumes using
 - **📐 Two Layout Options**: Single-column (ATS-friendly) and two-column (modern)
 - **🖼️ Image Support**: Professional headshots via markdown image links
 - **💾 Auto-save**: Automatic local storage persistence
-- **🎯 Export Ready**: PDF export functionality (in development)
+- **📄 PDF Export**: Client-side PDF generation with ATS and standard formats
 
 ## 🚀 Quick Start
 
@@ -39,15 +39,16 @@ Open [http://localhost:3000](http://localhost:3000) and start building your CV!
 - ✅ **State Management**: Zustand store with local storage
 - ✅ **CSS Architecture**: Organized, maintainable stylesheets
 - ✅ **Template Rendering**: Professional CV templates with theming
+- ✅ **PDF Export**: Client-side PDF generation with jsPDF + html2canvas
 
 ### 🚧 In Progress
-- 🔄 **PDF Export**: API endpoint and generation logic
-- 🔄 **Error Handling**: User feedback and error states
+- 🔄 **Error Handling**: Enhanced user feedback and error states
+- 🔄 **Performance Optimization**: Bundle size and rendering improvements
 
 ### 📋 Upcoming Features
 - 📋 **Multiple CV Management**: Save and manage multiple CVs
 - 📋 **Template Gallery**: More professional templates
-- 📋 **Enhanced Export**: Multiple formats and ATS optimization
+- 📋 **Advanced Export**: PDF optimization and additional formats
 - 📋 **Theme Customization**: Color and typography options
 
 ## 🏗️ Tech Stack

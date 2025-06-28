@@ -1,0 +1,186 @@
+/* PDF-specific styles for optimal rendering */
+
+.cv-preview-content {
+  /* Ensure high-quality rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Prevent rendering artifacts */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
+  /* Ensure consistent layout */
+  box-sizing: border-box;
+  
+  /* Improve page break handling */
+  overflow: visible;
+}
+
+/* Optimize images for PDF export */
+.cv-preview-content img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  max-width: 100%;
+  height: auto;
+  
+  /* Prevent image breaks across pages */
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Headshot image specific optimizations */
+.cv-headshot img {
+  /* Ensure proper aspect ratio is maintained in circular style */
+  object-fit: cover;
+  object-position: center;
+  
+  /* Prevent distortion in PDF */
+  width: var(--headshot-width, 120px);
+  height: var(--headshot-height, 150px);
+  
+  /* For circular style, ensure square dimensions */
+  aspect-ratio: 1 / 1;
+}
+
+.cv-headshot.circular img {
+  /* Force square aspect ratio for circular headshots */
+  width: var(--headshot-size, 120px);
+  height: var(--headshot-size, 120px);
+  min-width: var(--headshot-size, 120px);
+  min-height: var(--headshot-size, 120px);
+}
+
+/* Ensure proper text rendering in PDFs */
+.cv-preview-content * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* High-DPI optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .cv-preview-content {
+    font-weight: 300; /* Slightly lighter fonts look better at high DPI */
+  }
+}
+
+/* Prevent page breaks in unwanted places for better PDF flow */
+.cv-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1.5em;
+}
+
+.cv-section:last-child {
+  margin-bottom: 0;
+}
+
+.cv-header {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+/* Keep section headers with their content */
+.cv-section h2,
+.cv-section h3 {
+  break-after: avoid;
+  page-break-after: avoid;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Keep list items together when possible */
+.cv-section ul li,
+.cv-section ol li {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 0.5em;
+}
+
+/* Job/education entries should stay together */
+.cv-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 1em;
+}
+
+/* Experience/education item headers should stay with content */
+.cv-item h4,
+.cv-item h5 {
+  break-after: avoid;
+  page-break-after: avoid;
+  margin-bottom: 0.25em;
+}
+
+/* Ensure proper spacing in PDFs */
+.cv-preview-content p,
+.cv-preview-content ul,
+.cv-preview-content ol {
+  margin-bottom: 0.75em;
+  orphans: 2;
+  widows: 2;
+}
+
+.cv-preview-content h1,
+.cv-preview-content h2,
+.cv-preview-content h3 {
+  break-after: avoid;
+  page-break-after: avoid;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  orphans: 3;
+  widows: 3;
+}
+
+.cv-preview-content h1:first-child,
+.cv-preview-content h2:first-child,
+.cv-preview-content h3:first-child {
+  margin-top: 0;
+}
+
+/* Contact info should stay with header */
+.cv-contact {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Two-column specific optimizations */
+.two-column-cv .cv-main-content,
+.two-column-cv .cv-sidebar {
+  break-inside: auto;
+  page-break-inside: auto;
+}
+
+.two-column-cv .cv-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/* Prevent very short orphaned content at page bottom */
+@page {
+  orphans: 3;
+  widows: 3;
+}
+
+/* Multi-page preview styles */
+.cv-preview-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cv-preview-page {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #e5e7eb;
+}
+
+.cv-preview-page:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Page content styling for multi-page view */
+.cv-preview-page .cv-preview-content {
+  background: transparent !important;
+  box-shadow: none !important;
+}

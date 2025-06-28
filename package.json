@@ -3,7 +3,14 @@
   "version": "0.1.0",
   "description": "A modern markdown-first CV/resume builder with real-time preview and PDF export",
   "private": true,
-  "keywords": ["cv", "resume", "markdown", "pdf", "ats", "builder"],
+  "keywords": [
+    "cv",
+    "resume",
+    "markdown",
+    "pdf",
+    "ats",
+    "builder"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
@@ -14,7 +21,10 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@types/html2canvas": "^0.5.35",
     "allotment": "^1.20.4",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
     "lucide-react": "^0.523.0",
     "next": "15.3.4",
     "react": "^19.0.0",

@@ -44,6 +44,7 @@ export function SingleColumnTemplate({ content, originalMarkdown, template, zoom
     '--headshot-width': content.headshot?.styling?.width || '120px',
     '--headshot-height': content.headshot?.styling?.height || '150px',
     '--headshot-border-radius': content.headshot?.styling?.borderRadius || '8px',
+    '--headshot-size': content.headshot?.shape === 'circular' ? '120px' : (content.headshot?.styling?.width || '120px'),
   } as React.CSSProperties;
 
   return (
@@ -80,14 +81,15 @@ export function SingleColumnTemplate({ content, originalMarkdown, template, zoom
         </div>
         
         {content.hasImage && content.headshot && (
-          <img
-            src={validateImageUrl(content.headshot.src)}
-            alt={content.headshot.alt}
-            className="cv-headshot"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
-          />
+          <div className={`cv-headshot ${content.headshot.shape || 'rectangular'}`}>
+            <img
+              src={validateImageUrl(content.headshot.src)}
+              alt={content.headshot.alt}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          </div>
         )}
       </div>
 
@@ -102,8 +104,37 @@ export function SingleColumnTemplate({ content, originalMarkdown, template, zoom
               if (text === name) {
                 return null;
               }
-              return <h1 {...props}>{children}</h1>;
+              return <h1 className="cv-section-title" {...props}>{children}</h1>;
             },
+            // Add section classes to h2 headers
+            h2: ({ children, ...props }) => (
+              <h2 className="cv-section-title" {...props}>{children}</h2>
+            ),
+            // Add section classes to h3 headers
+            h3: ({ children, ...props }) => (
+              <h3 className="cv-subsection-title" {...props}>{children}</h3>
+            ),
+            // Add item classes to h4 and h5 (job titles, education, etc.)
+            h4: ({ children, ...props }) => (
+              <h4 className="cv-item-title" {...props}>{children}</h4>
+            ),
+            h5: ({ children, ...props }) => (
+              <h5 className="cv-item-subtitle" {...props}>{children}</h5>
+            ),
+            // Wrap paragraphs in cv-item class for better page breaks
+            p: ({ children, ...props }) => (
+              <p className="cv-text" {...props}>{children}</p>
+            ),
+            // Wrap lists in cv-item class
+            ul: ({ children, ...props }) => (
+              <ul className="cv-list" {...props}>{children}</ul>
+            ),
+            ol: ({ children, ...props }) => (
+              <ol className="cv-list" {...props}>{children}</ol>
+            ),
+            li: ({ children, ...props }) => (
+              <li className="cv-list-item" {...props}>{children}</li>
+            ),
             // Don't render images as they're handled separately
             img: () => null,
             // Custom link rendering
