@@ -42,11 +42,12 @@ export function removeHeadshotFromMarkdown(markdown: string): string {
  */
 export function processMarkdownForCV(markdown: string, layout: 'single-column' | 'two-column') {
   const headshot = extractHeadshot(markdown);
-  const contentWithoutHeadshot = removeHeadshotFromMarkdown(markdown);
+  let contentWithoutHeadshot = removeHeadshotFromMarkdown(markdown);
+  let contentWithoutTitle = removeTitleFromMarkdown(contentWithoutHeadshot);
   
   return {
     headshot,
-    content: contentWithoutHeadshot,
+    content: contentWithoutTitle,
     hasImage: !!headshot
   };
 }
@@ -121,6 +122,22 @@ export function extractTitle(markdown: string): string {
     }
   }
   return 'Professional Title';
+}
+
+/**
+ * Remove the title (first bold text) from markdown content
+ */
+export function removeTitleFromMarkdown(markdown: string): string {
+  const lines = markdown.split('\n');
+  for (let i = 0; i < Math.min(5, lines.length); i++) {
+    const line = lines[i];
+    if (line.match(/\*\*(.+)\*\*/)) {
+      // Remove this line and return the modified content
+      lines.splice(i, 1);
+      return lines.join('\n').trim();
+    }
+  }
+  return markdown;
 }
 
 /**

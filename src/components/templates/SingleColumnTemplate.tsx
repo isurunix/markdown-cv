@@ -12,13 +12,17 @@ interface SingleColumnTemplateProps {
     content: string;
     hasImage: boolean;
   };
+  originalMarkdown: string;
   template: Template;
   zoom: number;
 }
 
-export function SingleColumnTemplate({ content, template, zoom }: SingleColumnTemplateProps) {
-  const name = extractName(content.content);
-  const title = extractTitle(content.content);
+export function SingleColumnTemplate({ content, originalMarkdown, template, zoom }: SingleColumnTemplateProps) {
+  const name = extractName(originalMarkdown);
+  const title = extractTitle(originalMarkdown);
+  
+  // Content is already cleaned (no title duplication)
+  const cleanContent = content.content;
   
   // Create custom styles based on template
   const templateStyles = {
@@ -89,7 +93,7 @@ export function SingleColumnTemplate({ content, template, zoom }: SingleColumnTe
             ),
           }}
         >
-          {content.content}
+          {cleanContent}
         </ReactMarkdown>
       </div>
     </div>

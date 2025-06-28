@@ -12,13 +12,16 @@ interface TwoColumnTemplateProps {
     content: string;
     hasImage: boolean;
   };
+  originalMarkdown: string;
   template: Template;
   zoom: number;
 }
 
-export function TwoColumnTemplate({ content, template, zoom }: TwoColumnTemplateProps) {
-  const name = extractName(content.content);
-  const title = extractTitle(content.content);
+export function TwoColumnTemplate({ content, originalMarkdown, template, zoom }: TwoColumnTemplateProps) {
+  const name = extractName(originalMarkdown);
+  const title = extractTitle(originalMarkdown);
+  
+  // Content is already cleaned, split it for two-column layout
   const { mainContent, sidebarContent } = splitContentForTwoColumn(content.content);
   
   // Create custom styles based on template

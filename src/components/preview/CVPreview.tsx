@@ -24,6 +24,7 @@ export function CVPreview() {
       return (
         <TwoColumnTemplate
           content={processedContent}
+          originalMarkdown={markdown}
           template={currentTemplate}
           zoom={zoom}
         />
@@ -32,6 +33,7 @@ export function CVPreview() {
       return (
         <SingleColumnTemplate
           content={processedContent}
+          originalMarkdown={markdown}
           template={currentTemplate}
           zoom={zoom}
         />
