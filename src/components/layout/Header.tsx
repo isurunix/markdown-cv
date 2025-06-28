@@ -1,14 +1,10 @@
 "use client";
 
-import { useCVStore } from '@/lib/store';
-import { getTemplate } from '@/lib/templates';
 import { ExportButton } from './ExportButton';
 import { LayoutToggle } from './LayoutToggle';
 import { TemplateSelector } from './TemplateSelector';
 
 export function Header() {
-  const { layout, template } = useCVStore();
-  const currentTemplate = getTemplate(template);
 
   return (
     <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
@@ -32,11 +28,6 @@ export function Header() {
 
       {/* Right Actions */}
       <div className="flex items-center space-x-3">
-        <div className="hidden sm:flex items-center space-x-2 text-sm text-gray-600">
-          <span className="capitalize">{layout.replace('-', ' ')}</span>
-          <span>•</span>
-          <span>{currentTemplate.name}</span>
-        </div>
         <ExportButton />
       </div>
     </header>

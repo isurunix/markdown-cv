@@ -95,20 +95,12 @@ export function CVPreview() {
         </div>
       </div>
 
-      {/* Preview Info */}
-      <div className="px-4 py-2 bg-white border-t border-gray-200">
-        <div className="flex items-center justify-between text-xs text-gray-500">
+      {/* Footer with PDF Info */}
+      <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
+        <div className="flex items-center justify-end text-xs text-gray-500">
           <div className="flex items-center space-x-4">
-            <span>📄 {layout === 'single-column' ? 'Single Column' : 'Two Column'}</span>
-            <span>🎨 {currentTemplate.name}</span>
-            {processedContent.hasImage && (
-              <span>📸 Headshot included</span>
-            )}
-          </div>
-          <div className="flex items-center space-x-2">
-            <span>8.5" × 11"</span>
-            <span>•</span>
-            <span>Print ready</span>
+            <span>📄 US Letter (8.5" × 11")</span>
+            <span>📝 1 page</span>
           </div>
         </div>
       </div>
