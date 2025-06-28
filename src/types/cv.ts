@@ -68,6 +68,7 @@ export interface CVState {
   markdown: string;
   layout: 'single-column' | 'two-column';
   template: string;
+  pageFormat: 'A4' | 'US Letter';
   
   // UI state
   editorVisible: boolean;
@@ -82,6 +83,7 @@ export interface CVState {
   setMarkdown: (markdown: string) => void;
   setLayout: (layout: 'single-column' | 'two-column') => void;
   setTemplate: (template: string) => void;
+  setPageFormat: (format: 'A4' | 'US Letter') => void;
   toggleEditor: () => void;
   togglePreview: () => void;
   toggleDarkMode: () => void;

@@ -1,6 +1,6 @@
 "use client";
 
-import { extractName, extractTitle, validateImageUrl, extractContactInfo } from '@/lib/markdown';
+import { extractContactInfo, extractName, extractTitle, validateImageUrl } from '@/lib/markdown';
 import '@/styles/single-column.css';
 import { Template } from '@/types/cv';
 import ReactMarkdown from 'react-markdown';

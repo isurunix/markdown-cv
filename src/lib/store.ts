@@ -74,6 +74,7 @@ export const useCVStore = create<CVState>()(
       markdown: DEFAULT_CV_CONTENT,
       layout: 'single-column',
       template: 'classic-professional',
+      pageFormat: 'US Letter',
       editorVisible: true,
       previewVisible: true,
       darkMode: false,
@@ -86,6 +87,8 @@ export const useCVStore = create<CVState>()(
       setLayout: (layout: 'single-column' | 'two-column') => set({ layout }),
       
       setTemplate: (template: string) => set({ template }),
+      
+      setPageFormat: (pageFormat: 'A4' | 'US Letter') => set({ pageFormat }),
       
       toggleEditor: () => set((state) => ({ 
         editorVisible: !state.editorVisible,
@@ -113,6 +116,7 @@ export const useCVStore = create<CVState>()(
         markdown: state.markdown,
         layout: state.layout,
         template: state.template,
+        pageFormat: state.pageFormat,
         darkMode: state.darkMode,
       }),
     }

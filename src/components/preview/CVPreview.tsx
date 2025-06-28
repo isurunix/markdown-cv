@@ -9,11 +9,19 @@ import { ZoomIn, ZoomOut } from 'lucide-react';
 import { useState } from 'react';
 
 export function CVPreview() {
-  const { markdown, layout, template } = useCVStore();
+  const { markdown, layout, template, pageFormat, setPageFormat } = useCVStore();
   const [zoom, setZoom] = useState(100);
   
   const currentTemplate = getTemplate(template);
   const processedContent = processMarkdownForCV(markdown, layout);
+
+  // Page format configurations
+  const pageFormats = {
+    'US Letter': { width: '8.5in', height: '11in', label: '📄 US Letter (8.5" × 11")' },
+    'A4': { width: '8.27in', height: '11.7in', label: '📄 A4 (210 × 297mm)' }
+  };
+
+  const currentPageFormat = pageFormats[pageFormat];
 
   const handleZoomIn = () => setZoom(prev => Math.min(prev + 10, 200));
   const handleZoomOut = () => setZoom(prev => Math.max(prev - 10, 50));
@@ -85,8 +93,8 @@ export function CVPreview() {
             style={{
               transform: `scale(${zoom / 100})`,
               transformOrigin: 'top center',
-              width: '8.5in',
-              minHeight: '11in',
+              width: currentPageFormat.width,
+              minHeight: currentPageFormat.height,
               margin: zoom !== 100 ? `0 ${Math.abs(100 - zoom) * 2}px` : '0'
             }}
           >
@@ -99,7 +107,14 @@ export function CVPreview() {
       <div className="px-4 py-2 bg-gray-50 border-t border-gray-200">
         <div className="flex items-center justify-end text-xs text-gray-500">
           <div className="flex items-center space-x-4">
-            <span>📄 US Letter (8.5" × 11")</span>
+            <select
+              value={pageFormat}
+              onChange={(e) => setPageFormat(e.target.value as 'A4' | 'US Letter')}
+              className="bg-transparent border-none text-xs text-gray-500 cursor-pointer hover:text-gray-700 focus:outline-none"
+            >
+              <option value="US Letter">📄 US Letter (8.5" × 11")</option>
+              <option value="A4">📄 A4 (210 × 297mm)</option>
+            </select>
             <span>📝 1 page</span>
           </div>
         </div>
