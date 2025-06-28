@@ -44,10 +44,11 @@ export function processMarkdownForCV(markdown: string, layout: 'single-column' |
   const headshot = extractHeadshot(markdown);
   let contentWithoutHeadshot = removeHeadshotFromMarkdown(markdown);
   let contentWithoutTitle = removeTitleFromMarkdown(contentWithoutHeadshot);
+  let contentWithoutContact = removeContactInfoFromMarkdown(contentWithoutTitle);
   
   return {
     headshot,
-    content: contentWithoutTitle,
+    content: contentWithoutContact,
     hasImage: !!headshot
   };
 }
@@ -77,7 +78,7 @@ export function splitContentForTwoColumn(markdown: string) {
   
   // Define which sections go in main content vs sidebar
   const mainSections = ['Professional Summary', 'Experience', 'Projects'];
-  const sidebarSections = ['Contact Information', 'Skills', 'Education', 'Certifications', 'Languages'];
+  const sidebarSections = ['Skills', 'Education', 'Certifications', 'Languages']; // Removed 'Contact Information'
   
   const mainContent = [];
   const sidebarContent = [];
@@ -138,6 +139,34 @@ export function removeTitleFromMarkdown(markdown: string): string {
     }
   }
   return markdown;
+}
+
+/**
+ * Extract contact information from markdown content
+ */
+export function extractContactInfo(markdown: string): string[] {
+  const contactRegex = /## Contact Information([\s\S]*?)(?=##|$)/;
+  const match = markdown.match(contactRegex);
+  
+  if (match) {
+    const contactSection = match[1];
+    const lines = contactSection.split('\n')
+      .map(line => line.trim())
+      .filter(line => line && !line.startsWith('##'))
+      .filter(line => line.startsWith('-') || line.includes('📧') || line.includes('📱') || line.includes('💼') || line.includes('🌐') || line.includes('🔗') || line.includes('📍'));
+    
+    return lines.map(line => line.replace(/^-\s*/, '').trim());
+  }
+  
+  return [];
+}
+
+/**
+ * Remove contact information section from markdown content
+ */
+export function removeContactInfoFromMarkdown(markdown: string): string {
+  const contactRegex = /## Contact Information([\s\S]*?)(?=##|$)/;
+  return markdown.replace(contactRegex, '').trim();
 }
 
 /**

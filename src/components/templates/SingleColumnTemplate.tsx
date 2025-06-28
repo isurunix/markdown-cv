@@ -1,6 +1,6 @@
 "use client";
 
-import { extractName, extractTitle, validateImageUrl } from '@/lib/markdown';
+import { extractName, extractTitle, validateImageUrl, extractContactInfo } from '@/lib/markdown';
 import '@/styles/single-column.css';
 import { Template } from '@/types/cv';
 import ReactMarkdown from 'react-markdown';
@@ -20,6 +20,7 @@ interface SingleColumnTemplateProps {
 export function SingleColumnTemplate({ content, originalMarkdown, template, zoom }: SingleColumnTemplateProps) {
   const name = extractName(originalMarkdown);
   const title = extractTitle(originalMarkdown);
+  const contactInfo = extractContactInfo(originalMarkdown);
   
   // Content is already cleaned (no title duplication)
   const cleanContent = content.content;
@@ -56,6 +57,26 @@ export function SingleColumnTemplate({ content, originalMarkdown, template, zoom
         <div className="cv-header-text">
           <h1 className="cv-name">{name}</h1>
           <div className="cv-title">{title}</div>
+          {contactInfo.length > 0 && (
+            <div className="cv-contact">
+              {contactInfo.map((contact, index) => (
+                <div key={index} className="contact-item">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <>{children}</>,
+                      a: ({ href, children, ...props }) => (
+                        <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+                          {children}
+                        </a>
+                      ),
+                    }}
+                  >
+                    {contact}
+                  </ReactMarkdown>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         
         {content.hasImage && content.headshot && (

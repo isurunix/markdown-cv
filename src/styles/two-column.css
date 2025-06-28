@@ -198,3 +198,27 @@
     height: 150px;
   }
 }
+
+.cv-contact {
+  margin-top: 12px;
+  font-size: calc(var(--body-size) * 0.9);
+  color: var(--secondary-color);
+}
+
+.contact-item {
+  margin-bottom: 4px;
+  display: block;
+}
+
+.contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.cv-contact a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.cv-contact a:hover {
+  text-decoration: underline;
+}

@@ -6,11 +6,11 @@
 
 ## Contact Information
 
-📧 jane.smith@email.com  
-📱 (555) 987-6543  
-💼 linkedin.com/in/janesmith  
-🌐 janesmith.design  
-📍 New York, NY
+- 📧 jane.smith@email.com
+- 📱 (555) 987-6543
+- 💼 linkedin.com/in/janesmith
+- 🌐 janesmith.design
+- 📍 New York, NY
 
 ## Professional Summary
 
