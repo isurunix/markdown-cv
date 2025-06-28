@@ -54,10 +54,10 @@
   margin: 0;
 }
 
-.cv-headshot {
-  width: 140px;
-  height: 175px;
-  border-radius: 8px;
+.two-column-cv .cv-headshot {
+  width: var(--headshot-width, 140px) !important;
+  height: var(--headshot-height, 175px) !important;
+  border-radius: var(--headshot-border-radius, 8px) !important;
   object-fit: cover;
   margin-left: 20px;
   flex-shrink: 0;
@@ -138,9 +138,7 @@
   border-left: 4px solid var(--accent-color);
 }
 
-.tech-professional .cv-headshot {
-  border-radius: 12px;
-}
+
 
 .tech-professional .cv-content .tech-skills {
   font-family: 'Fira Code', 'Consolas', monospace;

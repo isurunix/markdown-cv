@@ -2,21 +2,26 @@ import { ImageConfig } from '@/types/cv';
 
 /**
  * Extract the first image from markdown content to use as headshot
+ * Supports shape in alt text: ![circular](url) or ![rectangular](url)
  */
 export function extractHeadshot(markdown: string): ImageConfig | null {
   const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/;
   const match = markdown.match(imageRegex);
   
   if (match) {
+    const altText = match[1].toLowerCase().trim();
+    const shape = (altText === 'circular' || altText === 'rectangular') ? altText as 'circular' | 'rectangular' : 'rectangular';
+    
     return {
       src: match[2],
-      alt: match[1] || 'Professional Headshot',
+      alt: shape === 'circular' ? 'Circular Headshot' : 'Rectangular Headshot',
       isHeadshot: true,
       position: 'sidebar', // Default for two-column
+      shape,
       styling: {
-        width: '150px',
-        height: '200px',
-        borderRadius: '8px',
+        width: shape === 'circular' ? '140px' : '140px', // Use 140px for two-column layout
+        height: shape === 'circular' ? '140px' : '175px',
+        borderRadius: shape === 'circular' ? '50%' : '8px',
         objectFit: 'cover'
       }
     };

@@ -5,7 +5,6 @@ export const templates: Record<string, Template> = {
     id: 'classic-professional',
     name: 'Classic Professional',
     description: 'Traditional, ATS-friendly format perfect for conservative industries',
-    layout: 'single-column',
     styles: {
       colors: {
         primary: '#1f2937',
@@ -36,7 +35,6 @@ export const templates: Record<string, Template> = {
     id: 'modern-minimalist',
     name: 'Modern Minimalist',
     description: 'Clean, contemporary design with subtle accents',
-    layout: 'single-column',
     styles: {
       colors: {
         primary: '#374151',
@@ -63,11 +61,10 @@ export const templates: Record<string, Template> = {
     preview: '/templates/modern-minimalist.png'
   },
 
-  'executive-two-column': {
-    id: 'executive-two-column',
+  'executive': {
+    id: 'executive',
     name: 'Executive',
-    description: 'Premium two-column layout for senior positions',
-    layout: 'two-column',
+    description: 'Premium design for senior positions and leadership roles',
     styles: {
       colors: {
         primary: '#2d3748',
@@ -91,14 +88,13 @@ export const templates: Record<string, Template> = {
         padding: '0.75in'
       }
     },
-    preview: '/templates/executive-two-column.png'
+    preview: '/templates/executive.png'
   },
 
   'tech-professional': {
     id: 'tech-professional',
     name: 'Tech Professional',
-    description: 'Modern two-column design tailored for tech industry',
-    layout: 'two-column',
+    description: 'Modern design tailored for technology and creative industries',
     styles: {
       colors: {
         primary: '#0f172a',
@@ -128,10 +124,6 @@ export const templates: Record<string, Template> = {
 
 export const getTemplate = (templateId: string): Template => {
   return templates[templateId] || templates['classic-professional'];
-};
-
-export const getTemplatesByLayout = (layout: 'single-column' | 'two-column'): Template[] => {
-  return Object.values(templates).filter(template => template.layout === layout);
 };
 
 export const getAllTemplates = (): Template[] => {

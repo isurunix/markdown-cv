@@ -1,7 +1,7 @@
 # Jane Smith
 **Senior UX Designer**
 
-![Professional Headshot](https://images.unsplash.com/photo-1494790108755-2616b612b002?w=300&h=400&fit=crop&crop=face)
+![rectangular](https://images.unsplash.com/photo-1494790108755-2616b612b002?w=300&h=400&fit=crop&crop=face)
 
 ## Contact Information
 - 📧 jane.smith@email.com

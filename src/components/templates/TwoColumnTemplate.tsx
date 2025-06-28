@@ -36,6 +36,10 @@ export function TwoColumnTemplate({ content, template, zoom }: TwoColumnTemplate
     '--section-gap': template.styles.spacing.sectionGap,
     '--item-gap': template.styles.spacing.itemGap,
     '--padding': template.styles.spacing.padding,
+    // Headshot styling variables
+    '--headshot-width': content.headshot?.styling?.width || '140px',
+    '--headshot-height': content.headshot?.styling?.height || '175px',
+    '--headshot-border-radius': content.headshot?.styling?.borderRadius || '8px',
   } as React.CSSProperties;
 
   return (

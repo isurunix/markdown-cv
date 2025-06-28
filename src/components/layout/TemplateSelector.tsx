@@ -1,16 +1,16 @@
 "use client";
 
 import { useCVStore } from '@/lib/store';
-import { getTemplatesByLayout } from '@/lib/templates';
+import { getAllTemplates, getTemplate } from '@/lib/templates';
 import { ChevronDown, Palette } from 'lucide-react';
 import { useState } from 'react';
 
 export function TemplateSelector() {
-  const { layout, template, setTemplate } = useCVStore();
+  const { template, setTemplate } = useCVStore();
   const [isOpen, setIsOpen] = useState(false);
   
-  const availableTemplates = getTemplatesByLayout(layout);
-  const currentTemplate = availableTemplates.find(t => t.id === template) || availableTemplates[0];
+  const availableTemplates = getAllTemplates();
+  const currentTemplate = getTemplate(template);
 
   const handleTemplateChange = (templateId: string) => {
     setTemplate(templateId);
@@ -40,7 +40,7 @@ export function TemplateSelector() {
           <div className="absolute right-0 z-20 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg">
             <div className="p-3 border-b border-gray-100">
               <h3 className="text-sm font-medium text-gray-900">
-                {layout === 'single-column' ? 'Single Column Templates' : 'Two Column Templates'}
+                Choose Template
               </h3>
             </div>
             

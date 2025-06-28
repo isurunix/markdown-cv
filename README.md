@@ -86,7 +86,7 @@ src/
 
 - Use `# Your Name` for the main heading
 - Add `**Your Title**` for your job title
-- Include images: `![Headshot](image-url)`
+- Include headshots: `![circular](image-url)` or `![rectangular](image-url)`
 - Use `## Section` for main sections
 - Use `### Job Title | Company` for experience items
 

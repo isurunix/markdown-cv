@@ -35,6 +35,10 @@ export function SingleColumnTemplate({ content, template, zoom }: SingleColumnTe
     '--section-gap': template.styles.spacing.sectionGap,
     '--item-gap': template.styles.spacing.itemGap,
     '--padding': template.styles.spacing.padding,
+    // Headshot styling variables
+    '--headshot-width': content.headshot?.styling?.width || '120px',
+    '--headshot-height': content.headshot?.styling?.height || '150px',
+    '--headshot-border-radius': content.headshot?.styling?.borderRadius || '8px',
   } as React.CSSProperties;
 
   return (

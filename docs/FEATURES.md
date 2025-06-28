@@ -468,3 +468,44 @@ interface PreviewControls {
 - **Integration**: LinkedIn import, job board integration
 
 This specification serves as the detailed blueprint for implementing all features with consistent quality and user experience.
+
+### 8. Image and Headshot System
+
+#### Headshot Shape Options
+**Feature**: Choose between circular and rectangular headshot styles using the image alt text
+
+**Implementation**:
+```markdown
+![circular](image-url)
+![rectangular](image-url)
+```
+
+#### Technical Details
+- **Default Shape**: Rectangular if alt text is not 'circular' or 'rectangular'
+- **Alt Text Processing**: Case-insensitive matching for 'circular' and 'rectangular'
+- **Circular Dimensions**: 140px × 140px with 50% border-radius
+- **Rectangular Dimensions**: 
+  - Single-column: 120px × 150px
+  - Two-column: 140px × 175px
+- **CSS Implementation**: Uses CSS custom properties for dynamic styling
+- **Responsive**: Adapts to different screen sizes
+
+#### Image Processing
+- **Auto-detection**: First image in markdown is treated as headshot
+- **Validation**: Invalid URLs fallback to placeholder image
+- **Error Handling**: Hidden on load failure
+- **Optimization**: Object-fit cover for consistent aspect ratios
+
+#### User Experience
+- **Simple syntax**: Use `![circular](url)` or `![rectangular](url)` 
+- **Live preview**: Changes reflect immediately in the preview
+- **Fallback behavior**: Any other alt text defaults to rectangular
+- **Backwards compatible**: Existing CVs continue to work
+- **Case insensitive**: Both `![Circular]` and `![circular]` work
+
+#### Migration from HTML Comments
+If you're upgrading from a previous version that used HTML comments:
+- **Old format**: `![alt](url) <!-- circular -->`
+- **New format**: `![circular](url)`
+- The new format is cleaner and more semantic
+- Old CVs will default to rectangular shape and need manual update

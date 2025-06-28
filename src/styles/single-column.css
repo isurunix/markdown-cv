@@ -39,13 +39,13 @@
   display: block;
 }
 
-.cv-headshot {
+.single-column-cv .cv-headshot {
   position: absolute;
   top: 0;
   right: 0;
-  width: 120px;
-  height: 150px;
-  border-radius: 4px;
+  width: var(--headshot-width, 120px) !important;
+  height: var(--headshot-height, 150px) !important;
+  border-radius: var(--headshot-border-radius, 8px) !important;
   object-fit: cover;
 }
 
@@ -115,11 +115,6 @@
   padding-bottom: 0;
 }
 
-.modern-minimalist .cv-headshot {
-  border-radius: 50%;
-  width: 100px;
-  height: 125px;
-}
 
 /* Print styles */
 @media print {

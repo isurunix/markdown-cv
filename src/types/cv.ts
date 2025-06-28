@@ -21,7 +21,6 @@ export interface Template {
   id: string;
   name: string;
   description: string;
-  layout: 'single-column' | 'two-column';
   styles: {
     colors: {
       primary: string;
@@ -54,6 +53,7 @@ export interface ImageConfig {
   alt: string;
   isHeadshot: boolean;
   position: 'inline' | 'sidebar' | 'header';
+  shape: 'rectangular' | 'circular';
   styling: {
     width: string;
     height: string;
