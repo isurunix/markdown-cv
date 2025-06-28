@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* Note: Browser extensions (Grammarly, LastPass, etc.) may add attributes 
+          to the body element, causing hydration warnings. These are safe to ignore 
+          as they don't affect application functionality. */}
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>

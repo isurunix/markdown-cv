@@ -1,10 +1,10 @@
 "use client";
 
 import { extractName, extractTitle, splitContentForTwoColumn, validateImageUrl } from '@/lib/markdown';
+import '@/styles/two-column.css';
 import { Template } from '@/types/cv';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import '@/styles/two-column.css';
 
 interface TwoColumnTemplateProps {
   content: {

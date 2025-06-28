@@ -2,9 +2,9 @@
 
 import { debounce } from '@/lib/markdown';
 import { useCVStore } from '@/lib/store';
+import '@/styles/editor.css';
 import Editor from '@monaco-editor/react';
 import { useEffect, useRef } from 'react';
-import '@/styles/editor.css';
 
 export function MarkdownEditor() {
   const { markdown, setMarkdown, darkMode } = useCVStore();

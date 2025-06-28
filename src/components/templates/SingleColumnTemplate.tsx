@@ -1,10 +1,10 @@
 "use client";
 
 import { extractName, extractTitle, validateImageUrl } from '@/lib/markdown';
+import '@/styles/single-column.css';
 import { Template } from '@/types/cv';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import '@/styles/single-column.css';
 
 interface SingleColumnTemplateProps {
   content: {
