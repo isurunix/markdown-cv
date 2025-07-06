@@ -1,19 +1,17 @@
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 import {
-    PDFGenerationOptions,
-    PDFGenerationResult
+  PDFGenerationOptions,
+  PDFGenerationResult
 } from './types';
 import {
-    calculatePDFDimensions,
-    CANVAS_OPTIONS,
-    generateFilename,
-    QUALITY_SETTINGS
+  generateFilename
 } from './utils';
 
+/**
+ * PDF Generator using server-side Puppeteer API
+ */
 export class PDFGenerator {
   /**
-   * Generate PDF from HTML element
+   * Generate PDF from HTML element using server-side API
    */
   static async generateFromElement(
     element: HTMLElement,
@@ -28,35 +26,48 @@ export class PDFGenerator {
         ...options
       };
 
-      // Get quality settings based on quality level
-      const qualitySettings = config.quality === 1 
-        ? QUALITY_SETTINGS.ATS 
-        : QUALITY_SETTINGS.STANDARD;
+      // Extract HTML content from the element
+      const htmlContent = this.extractHTMLContent(element);
 
-      // Prepare element for capture
-      await this.prepareElementForCapture(element);
+      // Prepare API request
+      const requestBody = {
+        html: htmlContent,
+        options: {
+          pageFormat: config.pageFormat,
+          quality: config.quality === 1 ? 'ats' : 'standard'
+        }
+      };
 
-      // Capture element as canvas
-      const canvas = await html2canvas(element, {
-        ...CANVAS_OPTIONS,
-        scale: qualitySettings.scale,
-      } as any); // Type assertion for scale property
+      // Call the PDF generation API
+      const response = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
 
-      // Calculate PDF dimensions
-      const dimensions = calculatePDFDimensions(canvas, config.pageFormat);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+      }
 
-      // Create PDF document
-      const pdf = new jsPDF('portrait', 'mm', config.pageFormat === 'A4' ? 'a4' : 'letter');
-
-      // Add canvas to PDF with multi-page support
-      const pageCount = await this.addCanvasToPDF(pdf, canvas, dimensions);
-
-      // Save PDF
-      pdf.save(config.filename);
-
-      // Calculate file size (approximate)
-      const pdfBlob = pdf.output('blob');
+      // Get the PDF blob
+      const pdfBlob = await response.blob();
       const fileSize = pdfBlob.size;
+
+      // Trigger download
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = config.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      // Estimate page count (rough calculation)
+      const pageCount = Math.max(1, Math.ceil(fileSize / 50000)); // ~50KB per page estimate
 
       return {
         success: true,
@@ -74,70 +85,55 @@ export class PDFGenerator {
   }
 
   /**
-   * Prepare element for high-quality capture
+   * Extract HTML content from element, preserving styles
    */
-  private static async prepareElementForCapture(element: HTMLElement): Promise<void> {
-    // Ensure all images are loaded
-    const images = element.querySelectorAll('img');
-    const imagePromises = Array.from(images).map(img => {
-      if (img.complete) return Promise.resolve();
-      
-      return new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        // Add timeout for external images
-        setTimeout(() => resolve(null), 5000);
-      });
-    });
+  private static extractHTMLContent(element: HTMLElement): string {
+    // Clone the element to avoid modifying the original
+    const clone = element.cloneNode(true) as HTMLElement;
 
-    await Promise.allSettled(imagePromises);
+    // Get computed styles and inline them
+    this.inlineStyles(clone, element);
 
-    // Force layout recalculation
-    element.style.transform = 'translateZ(0)';
-    element.offsetHeight; // Trigger reflow
-    element.style.transform = '';
+    // Return the HTML content
+    return clone.outerHTML;
   }
 
   /**
-   * Add canvas to PDF with multi-page support
+   * Inline computed styles to preserve appearance in PDF
    */
-  private static async addCanvasToPDF(
-    pdf: jsPDF,
-    canvas: HTMLCanvasElement,
-    dimensions: ReturnType<typeof calculatePDFDimensions>
-  ): Promise<number> {
-    const { imgWidth, imgHeight, pageHeight } = dimensions;
+  private static inlineStyles(clonedElement: HTMLElement, originalElement: HTMLElement): void {
+    const computedStyle = window.getComputedStyle(originalElement);
     
-    // Convert canvas to image data
-    const imgData = canvas.toDataURL('image/png', 0.95);
-    
-    let heightLeft = imgHeight;
-    let position = 0;
-    let pageCount = 0;
+    // List of important styles to preserve
+    const importantStyles = [
+      'font-family', 'font-size', 'font-weight', 'font-style',
+      'color', 'background-color', 'background-image',
+      'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+      'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+      'border', 'border-top', 'border-right', 'border-bottom', 'border-left',
+      'border-radius', 'text-align', 'line-height', 'letter-spacing',
+      'display', 'position', 'width', 'height', 'max-width', 'max-height',
+      'flex', 'flex-direction', 'justify-content', 'align-items',
+      'grid', 'grid-template-columns', 'grid-gap', 'gap'
+    ];
 
-    // Add pages as needed
-    while (heightLeft > 0) {
-      if (pageCount > 0) {
-        pdf.addPage();
+    // Apply styles to the cloned element
+    importantStyles.forEach(property => {
+      const value = computedStyle.getPropertyValue(property);
+      if (value && value !== 'initial' && value !== 'inherit') {
+        clonedElement.style.setProperty(property, value);
       }
-      
-      // For pages after the first, we need to offset the position
-      const yPosition = pageCount > 0 ? position : 0;
-      
-      pdf.addImage(imgData, 'PNG', 0, yPosition, imgWidth, imgHeight);
-      
-      heightLeft -= pageHeight;
-      position = position - pageHeight; // Move up for next page
-      pageCount++;
+    });
 
-      // Safety check to prevent infinite loops
-      if (pageCount > 20) {
-        console.warn('PDF generation stopped at 20 pages to prevent infinite loop');
-        break;
+    // Recursively apply to children
+    const originalChildren = originalElement.children;
+    const clonedChildren = clonedElement.children;
+    
+    for (let i = 0; i < originalChildren.length; i++) {
+      if (originalChildren[i] instanceof HTMLElement && clonedChildren[i] instanceof HTMLElement) {
+        this.inlineStyles(clonedChildren[i] as HTMLElement, originalChildren[i] as HTMLElement);
       }
     }
-
-    return pageCount;
   }
 
   /**

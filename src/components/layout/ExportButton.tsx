@@ -14,10 +14,26 @@ export function ExportButton() {
       setExporting(true);
       setIsOpen(false); // Close dropdown
       
-      // Get the CV preview element
-      const previewElement = document.querySelector('.cv-preview-content') as HTMLElement;
+      // Get the CV preview element - prefer the hidden export element
+      let previewElement = document.querySelector('.cv-pdf-export') as HTMLElement;
+      
+      // If not found, try the visible preview content
       if (!previewElement) {
-        throw new Error('CV preview not found. Please ensure the CV is loaded.');
+        previewElement = document.querySelector('.cv-preview-content') as HTMLElement;
+      }
+      
+      // If still not found, try the pages view
+      if (!previewElement) {
+        previewElement = document.querySelector('.cv-preview-pages .cv-preview-page:first-child') as HTMLElement;
+      }
+      
+      // If still not found, try any element with CV content
+      if (!previewElement) {
+        previewElement = document.querySelector('[class*="cv-preview"]') as HTMLElement;
+      }
+      
+      if (!previewElement) {
+        throw new Error('CV preview not found. Please ensure the CV is loaded and try switching to single view mode.');
       }
 
       // Generate PDF using our client-side service

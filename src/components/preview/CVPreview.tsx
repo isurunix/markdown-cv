@@ -226,6 +226,27 @@ export function CVPreview() {
             </div>
           )}
         </div>
+        
+        {/* Hidden single view for PDF export - always rendered for export purposes */}
+        <div 
+          className="cv-preview-content cv-pdf-export"
+          style={{
+            position: 'absolute',
+            left: '-10000px',
+            top: '-10000px',
+            width: currentPageFormat.width,
+            minHeight: currentPageFormat.height,
+            visibility: 'hidden',
+            pointerEvents: 'none',
+            backgroundColor: 'white',
+            overflow: 'visible',
+            transform: 'none',
+            scale: 'none',
+            zIndex: -1
+          }}
+        >
+          {renderTemplate()}
+        </div>
       </div>
 
       {/* Footer with PDF Info */}
