@@ -24,6 +24,7 @@
   padding: 20px;
   border-radius: 8px;
   height: fit-content;
+  margin-top: -20px; /* Pull sidebar higher to align with main content */
 }
 
 .cv-header {
@@ -131,27 +132,27 @@
 }
 
 /* Sidebar specific styles */
-.sidebar .cv-content h2 {
+.cv-sidebar .cv-content h2 {
   margin-top: 16px;
   font-size: calc(var(--h2-size) * 0.9);
 }
 
-.sidebar .cv-content h2:first-child {
-  margin-top: 0;
+.cv-sidebar .cv-content h2:first-child {
+  margin-top: 0; /* Reset to default since sidebar alignment is handled at container level */
 }
 
-.sidebar .cv-content p,
-.sidebar .cv-content li {
+.cv-sidebar .cv-content p,
+.cv-sidebar .cv-content li {
   font-size: calc(var(--body-size) * 0.95);
 }
 
 /* Template-specific styles */
-.executive-two-column .sidebar {
+.executive-two-column .cv-sidebar {
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
   border-left: 4px solid var(--accent-color);
 }
 
-.tech-professional .sidebar {
+.tech-professional .cv-sidebar {
   background: #f1f5f9;
   border-left: 4px solid var(--accent-color);
 }
@@ -187,7 +188,7 @@
     font-size: 11px;
   }
 
-  .sidebar {
+  .cv-sidebar {
     padding: 16px;
   }
 
