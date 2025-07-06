@@ -1,11 +1,11 @@
 "use client";
 
-import { SingleColumnTemplate } from '@/components/templates/SingleColumnTemplate';
-import { TwoColumnTemplate } from '@/components/templates/TwoColumnTemplate';
+import { SingleColumnTemplate } from '@/components/layouts/SingleColumnTemplate';
+import { TwoColumnTemplate } from '@/components/layouts/TwoColumnTemplate';
 import { processMarkdownForCV } from '@/lib/markdown';
 import { useCVStore } from '@/lib/store';
 import { getTemplate } from '@/lib/templates';
-import '@/styles/pdf.css';
+import '@/styles/pdf/pdf.css';
 import { Eye, FileText, ZoomIn, ZoomOut } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 

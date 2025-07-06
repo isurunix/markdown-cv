@@ -1,7 +1,7 @@
 "use client";
 
 import { extractContactInfo, extractName, extractTitle, splitContentForTwoColumn, validateImageUrl } from '@/lib/markdown';
-import '@/styles/two-column.css';
+import '@/styles/layouts/two-column.css';
 import { Template } from '@/types/cv';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

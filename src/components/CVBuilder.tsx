@@ -5,9 +5,9 @@ import "allotment/dist/style.css";
 import { useEffect, useState } from 'react';
 
 import { MarkdownEditor } from '@/components/editor/MarkdownEditor';
-import { Header } from '@/components/layout/Header';
-import { MobileToggle } from '@/components/layout/MobileToggle';
 import { CVPreview } from '@/components/preview/CVPreview';
+import { Header } from '@/components/ui/Header';
+import { MobileToggle } from '@/components/ui/MobileToggle';
 import { useCVStore } from '@/lib/store';
 
 export function CVBuilder() {
