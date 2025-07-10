@@ -1,7 +1,7 @@
 "use client";
 
-import { SingleColumnTemplate } from '@/components/layouts/SingleColumnTemplate';
-import { TwoColumnTemplate } from '@/components/layouts/TwoColumnTemplate';
+import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout';
+import { TwoColumnLayout } from '@/components/layouts/TwoColumnLayout';
 import { processMarkdownForCV } from '@/lib/markdown';
 import { useCVStore } from '@/lib/store';
 import { getTemplate } from '@/lib/templates';
@@ -86,7 +86,7 @@ export function CVPreview() {
   const renderTemplate = () => {
     if (layout === 'two-column') {
       return (
-        <TwoColumnTemplate
+        <TwoColumnLayout
           content={processedContent}
           originalMarkdown={markdown}
           template={currentTemplate}
@@ -95,7 +95,7 @@ export function CVPreview() {
       );
     } else {
       return (
-        <SingleColumnTemplate
+        <SingleColumnLayout
           content={processedContent}
           originalMarkdown={markdown}
           template={currentTemplate}

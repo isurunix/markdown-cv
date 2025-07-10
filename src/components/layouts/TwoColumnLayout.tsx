@@ -3,11 +3,13 @@
 import { extractContactInfo, extractName, extractTitle, splitContentForTwoColumn, validateImageUrl } from '@/lib/markdown';
 import '@/styles/layouts/two-column.css';
 import { Template } from '@/types/cv';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-interface TwoColumnTemplateProps {
+interface TwoColumnLayoutProps {
   content: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headshot: any;
     content: string;
     hasImage: boolean;
@@ -17,7 +19,7 @@ interface TwoColumnTemplateProps {
   zoom: number;
 }
 
-export function TwoColumnTemplate({ content, originalMarkdown, template, zoom }: TwoColumnTemplateProps) {
+export function TwoColumnLayout({ content, originalMarkdown, template }: TwoColumnLayoutProps) {
   const name = extractName(originalMarkdown);
   const title = extractTitle(originalMarkdown);
   const contactInfo = extractContactInfo(originalMarkdown);
@@ -81,15 +83,21 @@ export function TwoColumnTemplate({ content, originalMarkdown, template, zoom }:
         </div>
         
         {content.hasImage && content.headshot && (
-          <div className={`cv-headshot ${content.headshot.shape || 'rectangular'}`}>
-            <img
-              src={validateImageUrl(content.headshot.src)}
-              alt={content.headshot.alt}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          </div>
+          <Image
+            src={validateImageUrl(content.headshot.src)}
+            alt={content.headshot.alt}
+            width={parseInt(String(content.headshot?.styling?.width ?? ''), 10) || 140}
+            height={parseInt(String(content.headshot?.styling?.height ?? ''), 10) || 175}
+            style={{
+              borderRadius: content.headshot?.styling?.borderRadius || '8px',
+              objectFit: 'cover',
+              width: content.headshot?.styling?.width || '140px',
+              height: content.headshot?.styling?.height || '175px',
+            }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+          />
         )}
       </div>
 

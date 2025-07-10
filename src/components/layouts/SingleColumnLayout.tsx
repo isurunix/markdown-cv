@@ -3,11 +3,13 @@
 import { extractContactInfo, extractName, extractTitle, validateImageUrl } from '@/lib/markdown';
 import '@/styles/layouts/single-column.css';
 import { Template } from '@/types/cv';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-interface SingleColumnTemplateProps {
+interface SingleColumnLayoutProps {
   content: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     headshot: any;
     content: string;
     hasImage: boolean;
@@ -17,7 +19,7 @@ interface SingleColumnTemplateProps {
   zoom: number;
 }
 
-export function SingleColumnTemplate({ content, originalMarkdown, template, zoom }: SingleColumnTemplateProps) {
+export function SingleColumnLayout({ content, originalMarkdown, template }: SingleColumnLayoutProps) {
   const name = extractName(originalMarkdown);
   const title = extractTitle(originalMarkdown);
   const contactInfo = extractContactInfo(originalMarkdown);
@@ -79,15 +81,20 @@ export function SingleColumnTemplate({ content, originalMarkdown, template, zoom
             </div>
           )}
         </div>
-        
         {content.hasImage && content.headshot && (
           <div className={`cv-headshot ${content.headshot.shape || 'rectangular'}`}>
-            <img
+            <Image
               src={validateImageUrl(content.headshot.src)}
               alt={content.headshot.alt}
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
+              width={parseInt(content.headshot?.styling?.width, 10) || 120}
+              height={parseInt(content.headshot?.styling?.height, 10) || 150}
+              style={{
+                borderRadius: content.headshot?.styling?.borderRadius || '8px',
+                objectFit: 'cover',
+                display: 'block',
               }}
+              onError={() => {}}
+              priority
             />
           </div>
         )}
