@@ -1,3 +1,4 @@
+import { useCVStore } from '@/lib/store';
 import {
   PDFGenerationOptions,
   PDFGenerationResult
@@ -29,12 +30,17 @@ export class PDFGenerator {
       // Extract HTML content from the element
       const htmlContent = this.extractHTMLContent(element);
 
+      // Get template and layout info from the store
+      const { template, layout } = useCVStore.getState();
+      
       // Prepare API request
       const requestBody = {
         html: htmlContent,
         options: {
           pageFormat: config.pageFormat,
-          quality: config.quality === 1 ? 'ats' : 'standard'
+          quality: config.quality === 1 ? 'ats' : 'standard',
+          template, // Add template ID
+          layout    // Add layout type
         }
       };
 
@@ -93,6 +99,65 @@ export class PDFGenerator {
 
     // Get computed styles and inline them
     this.inlineStyles(clone, element);
+
+    // Add layout wrapper classes if they don't exist
+    const { layout } = useCVStore.getState();
+    
+    // Ensure we have proper container classes for the layout
+    if (!clone.classList.contains('cv-container')) {
+      clone.classList.add('cv-container');
+    }
+    
+    if (layout === 'two-column' && !clone.classList.contains('two-column')) {
+      // Check if the structure needs to be enhanced for two-column layout
+      let needsColumnStructure = true;
+      
+      // Check if the structure already has left/right columns
+      const existingLeftCol = clone.querySelector('.two-column-left');
+      const existingRightCol = clone.querySelector('.two-column-right');
+      
+      if (existingLeftCol && existingRightCol) {
+        needsColumnStructure = false;
+      }
+      
+      if (needsColumnStructure) {
+        // Create proper two-column structure
+        clone.classList.add('two-column');
+        
+        // Create left and right column divs
+        const leftColumn = document.createElement('div');
+        leftColumn.className = 'two-column-left';
+        
+        const rightColumn = document.createElement('div');
+        rightColumn.className = 'two-column-right';
+        
+        // Move contact info, photo, and skills to left column
+        // Move main content to right column
+        // This is a simplified approach; adjust based on your specific HTML structure
+        Array.from(clone.children).forEach(child => {
+          // Decide which column based on content
+          const isLeftColumnContent = 
+            child.classList.contains('cv-contact') ||
+            child.classList.contains('cv-headshot') ||
+            child.classList.contains('cv-skills') ||
+            child.textContent?.includes('Skills') ||
+            child.textContent?.includes('Contact');
+            
+          if (isLeftColumnContent) {
+            leftColumn.appendChild(child);
+          } else {
+            rightColumn.appendChild(child);
+          }
+        });
+        
+        // Clear the clone's content and add the new structure
+        clone.innerHTML = '';
+        clone.appendChild(leftColumn);
+        clone.appendChild(rightColumn);
+      }
+    } else if (layout === 'single-column' && !clone.classList.contains('single-column')) {
+      clone.classList.add('single-column');
+    }
 
     // Return the HTML content
     return clone.outerHTML;

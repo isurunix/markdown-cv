@@ -3,6 +3,8 @@ export interface PDFGenerationOptions {
   filename: string;
   pageFormat: 'A4' | 'US Letter';
   quality: number; // 1 = low quality (ATS), 2 = high quality (standard)
+  template?: string; // Template ID
+  layout?: string;   // Layout type (single-column, two-column)
 }
 
 export interface PDFPageDimensions {

@@ -1,5 +1,6 @@
+import { generateTemplateCss } from '@/lib/pdf/templateToCss';
 import { NextRequest, NextResponse } from 'next/server';
-import puppeteer from 'puppeteer';
+import puppeteer, { PDFOptions, PaperFormat } from 'puppeteer';
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,13 +29,15 @@ export async function POST(request: NextRequest) {
 
     const page = await browser.newPage();
 
-    // Set page format based on options
+    // Extract options
     const pageFormat = options.pageFormat === 'A4' ? 'A4' : 'Letter';
     const quality = options.quality || 'standard'; // 'standard' or 'ats'
+    const template = options.template || 'classic-professional';
+    const layout = options.layout || 'single-column';
 
     // Set PDF options
-    const pdfOptions: any = {
-      format: pageFormat,
+    const pdfOptions: PDFOptions = {
+      format: pageFormat as PaperFormat,
       printBackground: true,
       margin: {
         top: '0.5in',
@@ -54,7 +57,10 @@ export async function POST(request: NextRequest) {
       pdfOptions.displayHeaderFooter = false;
     }
 
-    // Create a complete HTML document with proper CSS
+    // Generate CSS based on template and layout
+    const templateCss = generateTemplateCss(template, layout);
+    
+    // Create a complete HTML document with template-specific CSS
     const fullHtml = `
       <!DOCTYPE html>
       <html lang="en">
@@ -63,124 +69,7 @@ export async function POST(request: NextRequest) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CV Export</title>
         <style>
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-          
-          body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: white;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
-          
-          /* Override any hidden/positioned elements for PDF generation */
-          .cv-preview-content, .cv-pdf-export {
-            position: static !important;
-            left: auto !important;
-            top: auto !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-            z-index: auto !important;
-            transform: none !important;
-          }
-          
-          /* CV Styles */
-          h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #1f2937;
-          }
-          
-          h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            color: #374151;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0.5rem;
-          }
-          
-          h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #374151;
-          }
-          
-          p {
-            margin-bottom: 1rem;
-            line-height: 1.7;
-          }
-          
-          strong {
-            font-weight: 600;
-            color: #1f2937;
-          }
-          
-          ul, ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-          }
-          
-          li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-          }
-          
-          a {
-            color: #2563eb;
-            text-decoration: none;
-          }
-          
-          a:hover {
-            text-decoration: underline;
-          }
-          
-          img {
-            max-width: 200px;
-            height: auto;
-            border-radius: 8px;
-            margin: 1rem 0;
-          }
-          
-          /* Page break control */
-          @media print {
-            .page-break {
-              page-break-before: always;
-            }
-            
-            h1, h2, h3 {
-              page-break-after: avoid;
-            }
-            
-            p, li {
-              page-break-inside: avoid;
-              orphans: 2;
-              widows: 2;
-            }
-          }
-          
-          /* Two column layout if specified */
-          .two-column {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            align-items: start;
-          }
-          
-          .single-column {
-            max-width: 8.5in;
-            margin: 0 auto;
-            padding: 1rem;
-          }
+          ${templateCss}
         </style>
       </head>
       <body>
@@ -194,8 +83,44 @@ export async function POST(request: NextRequest) {
       waitUntil: ['networkidle0', 'domcontentloaded']
     });
 
-    // Wait a bit more for any dynamic content
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Execute script to fix layout issues that might occur in Puppeteer
+    await page.evaluate((layout) => {
+      // Additional layout fixes for two-column layout
+      if (layout === 'two-column') {
+        const container = document.body.querySelector('.cv-container') as HTMLElement;
+        if (container) {
+          // Ensure the container has proper display
+          container.style.display = 'flex';
+          container.style.flexDirection = 'column';
+          container.style.width = '100%';
+          
+          // Fix the two-column grid
+          const twoColContainer = container.querySelector('.two-column') as HTMLElement;
+          if (twoColContainer) {
+            twoColContainer.style.display = 'grid';
+            twoColContainer.style.gridTemplateColumns = 'minmax(200px, 1fr) minmax(400px, 2fr)';
+            twoColContainer.style.width = '100%';
+            twoColContainer.style.gap = '2rem';
+          }
+          
+          // Ensure left column has proper styling
+          const leftCol = container.querySelector('.two-column-left') as HTMLElement;
+          if (leftCol) {
+            leftCol.style.paddingRight = '1rem';
+          }
+          
+          // Ensure right column has proper styling
+          const rightCol = container.querySelector('.two-column-right') as HTMLElement;
+          if (rightCol) {
+            rightCol.style.borderLeft = '1px solid var(--secondary-color, #ddd)';
+            rightCol.style.paddingLeft = '1rem';
+          }
+        }
+      }
+    }, layout);
+
+    // Wait a bit more for any dynamic content and layout fixes to apply
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     // Generate PDF
     const pdfBuffer = await page.pdf(pdfOptions);
